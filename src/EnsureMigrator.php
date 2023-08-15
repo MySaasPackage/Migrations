@@ -17,7 +17,7 @@ class EnsureMigrator
     public function ensureMigrationsTableExists(): void
     {
         $sql = <<<SQL
-CREATE TABLE IF NOT EXISTS {$this->migrationsTable}(
+CREATE TABLE IF NOT EXISTS {$this->migrationsTable} (
     id SERIAL PRIMARY KEY,
     migration VARCHAR(255) NOT NULL,
     migrated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
