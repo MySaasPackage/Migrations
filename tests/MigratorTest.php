@@ -21,6 +21,7 @@ class MigratorTest extends TestCase
         $databasePass = 's3cr3t';
 
         $this->pdo = new PDO("pgsql:host={$databaseHost};port={$databasePort};dbname={$databaseName}", $databaseUser, $databasePass);
+        $this->pdo->exec('SET search_path TO abraham');
         $migrationsDir = dirname(__DIR__) . '/migrations';
         $this->migrator = new Migrator($this->pdo, $migrationsDir);
     }

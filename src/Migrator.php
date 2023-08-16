@@ -25,7 +25,6 @@ class Migrator
         $this->upwardMigrator = new UpwardMigrator($pdo, $this->defaultMigrationsTable, $this->migrationsDir);
         $this->downwardMigrator = new DownwardMigrator($pdo, $this->defaultMigrationsTable, $this->migrationsDir);
         $this->ensureMigrator = new EnsureMigrator($pdo, $this->defaultMigrationsTable);
-        $this->ensureMigrator->ensureMigrationsTableExists();
     }
 
     public function withDefaultContext(Context $context): Migrator
@@ -37,6 +36,7 @@ class Migrator
 
     public function up(Context $customContext = null): Migrator
     {
+        $this->ensureMigrator->ensureMigrationsTableExists();
         $this->upwardMigrator->migrate($this->defaultContext->merge($customContext));
 
         return $this;
@@ -44,6 +44,7 @@ class Migrator
 
     public function down(Context $customContext = null): Migrator
     {
+        $this->ensureMigrator->ensureMigrationsTableExists();
         $this->downwardMigrator->migrate($this->defaultContext->merge($customContext));
 
         return $this;
