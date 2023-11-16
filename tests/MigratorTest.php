@@ -21,7 +21,7 @@ class MigratorTest extends TestCase
         $databasePass = 's3cr3t';
 
         $this->pdo = new PDO("pgsql:host={$databaseHost};port={$databasePort};dbname={$databaseName}", $databaseUser, $databasePass);
-        $this->pdo->exec('SET search_path TO abraham');
+        $this->pdo->exec('SET search_path TO any_schema');
         $migrationsDir = dirname(__DIR__) . '/migrations';
         $this->migrator = new Migrator($this->pdo, $migrationsDir);
     }
@@ -44,7 +44,7 @@ class MigratorTest extends TestCase
         $this->migrator->up();
         $this->migrator->down();
 
-        $stmt = $this->pdo->query('SELECT COUNT(*) FROM pg_tables WHERE schemaname = \'public\';');
+        $stmt = $this->pdo->query('SELECT COUNT(*) FROM pg_tables WHERE schemaname = \'any_schema\';');
         $stmt->execute();
         $this->assertEquals(1, $stmt->fetchColumn());
 
