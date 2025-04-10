@@ -25,7 +25,7 @@ class DownwardMigrator
         return 0 === $stmt->rowCount();
     }
 
-    public function migrate(Context $context): void
+    public function migrate(MigrationContext $context): void
     {
         $files = glob(sprintf('%s/*.php', $this->migrationsDir));
         rsort($files);
@@ -35,7 +35,7 @@ class DownwardMigrator
         }
     }
 
-    public function migrateSingle(string $file, Context $context): void
+    public function migrateSingle(string $file, MigrationContext $context): void
     {
         $migration = basename($file, '.php');
         if ($this->isNotMigrated($migration)) {

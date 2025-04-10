@@ -16,12 +16,18 @@ class EnsureMigrator
 
     public function ensureMigrationsTableExists(): void
     {
+        [$schema] = explode('.', $this->migrationsTable);
+
         $sql = <<<SQL
-CREATE TABLE IF NOT EXISTS {$this->migrationsTable} (
-    id SERIAL PRIMARY KEY,
-    migration VARCHAR(255) NOT NULL,
-    migrated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+        CREATE SCHEMA IF NOT EXISTS {$schema};
+
+        SET search_path = {$schema};
+
+        CREATE TABLE IF NOT EXISTS {$this->migrationsTable} (
+            id SERIAL PRIMARY KEY,
+            migration VARCHAR(255) NOT NULL,
+            migrated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        );
 SQL;
         $this->pdo->exec($sql);
     }

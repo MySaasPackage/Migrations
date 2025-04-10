@@ -2,24 +2,24 @@
 
 declare(strict_types=1);
 
-use MySaasPackage\Migrations\Context;
+use MySaasPackage\Migrations\MigrationContext;
 
-$up = function (PDO $pdo, Context $context = null): void {
+$up = function (PDO $pdo, ?MigrationContext $context = null): void {
     $sql = <<<SQL
-CREATE TABLE IF NOT EXISTS subscriptions (
+CREATE TABLE IF NOT EXISTS public.subscriptions (
     id SERIAL PRIMARY KEY,
     user_id INTEGER NOT NULL
 );
 
-ALTER TABLE subscriptions ADD CONSTRAINT fk_subscriptions_users FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE;
+ALTER TABLE public.subscriptions ADD CONSTRAINT fk_subscriptions_users FOREIGN KEY (user_id) REFERENCES public.users(id) ON DELETE CASCADE;
 SQL;
 
     $pdo->exec($sql);
 };
 
-$down = function (PDO $pdo, Context $context = null): void {
-    $pdo->exec('ALTER TABLE subscriptions DROP CONSTRAINT fk_subscriptions_users;');
-    $pdo->exec('DROP TABLE subscriptions;');
+$down = function (PDO $pdo, ?MigrationContext $context = null): void {
+    $pdo->exec('ALTER TABLE public.subscriptions DROP CONSTRAINT fk_subscriptions_users;');
+    $pdo->exec('DROP TABLE public.subscriptions;');
 };
 
 return ['up' => $up, 'down' => $down];

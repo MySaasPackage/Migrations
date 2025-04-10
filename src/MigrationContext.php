@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MySaasPackage\Migrations;
 
-class Context
+class MigrationContext
 {
     protected $data = [];
 
@@ -28,7 +28,7 @@ class Context
         $this->data[$key] = $value;
     }
 
-    public function merge(Context|null $context): Context
+    public function merge(MigrationContext|null $context): MigrationContext
     {
         if (is_null($context)) {
             return $this;

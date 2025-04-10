@@ -8,7 +8,7 @@ use PDO;
 
 class Migrator
 {
-    protected Context $defaultContext;
+    protected MigrationContext $defaultContext;
 
     protected readonly EnsureMigrator $ensureMigrator;
 
@@ -19,22 +19,22 @@ class Migrator
     public function __construct(
         protected readonly PDO $pdo,
         protected readonly string $migrationsDir,
-        protected readonly string $defaultMigrationsTable = 'migrations',
+        protected readonly string $defaultMigrationsTable = 'public.migrations',
     ) {
-        $this->defaultContext = new Context();
+        $this->defaultContext = new MigrationContext();
         $this->upwardMigrator = new UpwardMigrator($pdo, $this->defaultMigrationsTable, $this->migrationsDir);
         $this->downwardMigrator = new DownwardMigrator($pdo, $this->defaultMigrationsTable, $this->migrationsDir);
         $this->ensureMigrator = new EnsureMigrator($pdo, $this->defaultMigrationsTable);
     }
 
-    public function withDefaultContext(Context $context): Migrator
+    public function withDefaultContext(MigrationContext $context): Migrator
     {
         $this->defaultContext = $this->defaultContext->merge($context);
 
         return $this;
     }
 
-    public function up(Context $customContext = null): Migrator
+    public function up(?MigrationContext $customContext = null): Migrator
     {
         $this->ensureMigrator->ensureMigrationsTableExists();
         $this->upwardMigrator->migrate($this->defaultContext->merge($customContext));
@@ -42,7 +42,7 @@ class Migrator
         return $this;
     }
 
-    public function down(Context $customContext = null): Migrator
+    public function down(?MigrationContext $customContext = null): Migrator
     {
         $this->ensureMigrator->ensureMigrationsTableExists();
         $this->downwardMigrator->migrate($this->defaultContext->merge($customContext));

@@ -25,7 +25,7 @@ class UpwardMigrator
         return $stmt->rowCount() > 0;
     }
 
-    public function migrate(Context $context): void
+    public function migrate(MigrationContext $context): void
     {
         $files = glob(sprintf('%s/*.php', $this->migrationsDir));
         sort($files);
@@ -35,7 +35,7 @@ class UpwardMigrator
         }
     }
 
-    public function migrateSingle(string $file, Context $context): void
+    public function migrateSingle(string $file, MigrationContext $context): void
     {
         $migration = basename($file, '.php');
         if ($this->isMigrated($migration)) {
